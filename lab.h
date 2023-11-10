@@ -27,6 +27,9 @@ struct Tarefa {
 //Função para calcular o comprimento de uma string
 size_t meu_strlen(const char *str);
 
+// Função para comparar duas strings e determinar a relação entre elas.
+int meu_strcmp(const char *s1, const char *s2);
+
 //Função para remover quebras de linha de uma string
 void removerQuebraLinha(char *str);
 
