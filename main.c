@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include "lab.h"
 int main() {
-    // irformando nossas variaveis e a opção de erro do arquivo.
     FILE *arquivo;
     arquivo = fopen("tarefas.dat", "ab+");
     if (arquivo == NULL) {
@@ -10,15 +9,16 @@ int main() {
     }
 
     int opcao;
-// criação da parte do Menu mais estética
+
     do {
         printf("Menu:\n");
         printf("1. Cadastrar Tarefa\n");
         printf("2. Listar Tarefas\n");
         printf("3. Deletar Tarefa\n");
+        printf("4. Sair\n"); // Adiciona a opção de sair
         printf("Escolha uma opcao: ");
         scanf("%d", &opcao);
-//Logica do Menu
+
         switch (opcao) {
             case 1:
                 cadastrarTarefa(arquivo);
@@ -29,10 +29,13 @@ int main() {
             case 3:
                 deletarTarefa(arquivo);
                 break;
+            case 4:
+                printf("Saindo do programa. Obrigado!\n");
+                break; // Adiciona a opção de sair
             default:
                 printf("Opção invalida. Tente novamente.\n");
         }
-    } while (opcao != 4);
+    } while (opcao != 4); // Ajusta a condição para incluir a opção de sair
 
     fclose(arquivo);
 
