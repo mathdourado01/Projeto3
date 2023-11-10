@@ -282,3 +282,166 @@ void alterarTarefa(FILE *arquivo) {
     // Fechar o arquivo após alterar a tarefa
     fclose(arquivo);
 }
+
+void filtrarPorPrioridade(FILE *arquivo) {
+    int prioridade;
+
+    printf("Digite a prioridade desejada: ");
+    scanf("%d", &prioridade);
+
+    struct Tarefa tarefa;
+
+    // Abrir o arquivo no modo de leitura
+    arquivo = fopen("tarefas.dat", "rb");
+    if (arquivo == NULL) {
+        perror("Erro ao abrir arquivo de tarefas");
+        return;
+    }
+
+    // Voltar para o início do arquivo
+    rewind(arquivo);
+
+    printf("Tarefas com Prioridade %d (Ordenadas da Maior para a Menor):\n", prioridade);
+
+    // Exibir as tarefas conforme são lidas do arquivo
+    while (fread(&tarefa, sizeof(struct Tarefa), 1, arquivo) == 1) {
+        if (tarefa.prioridade == prioridade) {
+            printf("Prioridade: %d\n", tarefa.prioridade);
+            printf("Descricao: %s\n", tarefa.descricao);
+            printf("Categoria: %s\n", tarefa.categoria);
+            printf("Estado: %s\n", getNomeEstado(tarefa.estado));
+            printf("\n");
+        }
+    }
+
+    // Fechar o arquivo após listar as tarefas
+    fclose(arquivo);
+}
+void filtrarPorEstado(FILE *arquivo) {
+    int estadoEscolhido;
+
+    printf("Digite o estado desejado (0 para NAO_INICIADO, 1 para EM_ANDAMENTO, 2 para COMPLETO): ");
+    scanf("%d", &estadoEscolhido);
+
+    struct Tarefa tarefa;
+    int tarefaEncontrada = 0;
+
+    // Abrir o arquivo no modo de leitura
+    arquivo = fopen("tarefas.dat", "rb");
+    if (arquivo == NULL) {
+        perror("Erro ao abrir arquivo de tarefas");
+        return;
+    }
+
+    // Voltar para o início do arquivo
+    rewind(arquivo);
+
+    printf("Tarefas com Estado %s:\n", getNomeEstado((enum Estado)estadoEscolhido));
+
+    while (fread(&tarefa, sizeof(struct Tarefa), 1, arquivo) == 1) {
+        if (tarefa.estado == estadoEscolhido) {
+            printf("Prioridade: %d\n", tarefa.prioridade);
+            printf("Descricao: %s\n", tarefa.descricao);
+            printf("Categoria: %s\n", tarefa.categoria);
+            printf("Estado: %s\n", getNomeEstado(tarefa.estado));
+            printf("\n");
+            tarefaEncontrada = 1;
+        }
+    }
+
+    if (!tarefaEncontrada) {
+        printf("Nenhuma tarefa encontrada com o estado %s.\n", getNomeEstado((enum Estado)estadoEscolhido));
+    }
+
+    // Fechar o arquivo após listar as tarefas
+    fclose(arquivo);
+}
+void filtrarPorCategoria(FILE *arquivo) {
+    char categoria[100];
+
+    printf("Digite a categoria desejada: ");
+    scanf("%99s", categoria);  // Limita a leitura para evitar estouro de buffer
+
+    struct Tarefa tarefa;
+    struct Tarefa tarefas[100];  // Assumindo um número máximo de 100 tarefas
+    int numTarefas = 0;
+
+    // Abrir o arquivo no modo de leitura
+    arquivo = fopen("tarefas.dat", "rb");
+    if (arquivo == NULL) {
+        perror("Erro ao abrir arquivo de tarefas");
+        return;
+    }
+
+    // Voltar para o início do arquivo
+    rewind(arquivo);
+
+    // Preencher o array de tarefas com as tarefas da categoria desejada
+    while (fread(&tarefa, sizeof(struct Tarefa), 1, arquivo) == 1) {
+        if (numTarefas < 100 && meu_strcmp(tarefa.categoria, categoria) == 0) {
+            tarefas[numTarefas++] = tarefa;
+        }
+    }
+
+    // Fechar o arquivo após contar as tarefas
+    fclose(arquivo);
+
+    // Ordenar o array de tarefas por prioridade (da maior para a menor)
+    for (int i = 0; i < numTarefas - 1; i++) {
+        for (int j = i + 1; j < numTarefas; j++) {
+            if (tarefas[i].prioridade < tarefas[j].prioridade) {
+                // Trocar as posições se a prioridade for menor
+                struct Tarefa temp = tarefas[i];
+                tarefas[i] = tarefas[j];
+                tarefas[j] = temp;
+            }
+        }
+    }
+
+    // Exibir as tarefas ordenadas
+    printf("Tarefas com Categoria %s (Ordenadas da Maior para a Menor Prioridade):\n", categoria);
+    for (int i = 0; i < numTarefas; i++) {
+        printf("Prioridade: %d\n", tarefas[i].prioridade);
+        printf("Descricao: %s\n", tarefas[i].descricao);
+        printf("Categoria: %s\n", tarefas[i].categoria);
+        printf("Estado: %s\n", getNomeEstado(tarefas[i].estado));
+        printf("\n");
+    }
+}
+void filtrarPorPrioridadeECategoria(FILE *arquivo) {
+    int prioridade;
+    char categoria[100];
+
+    printf("Digite a prioridade desejada: ");
+    scanf("%d", &prioridade);
+
+    printf("Digite a categoria desejada: ");
+    scanf("%99s", categoria);  // Limita a leitura para evitar estouro de buffer
+
+    struct Tarefa tarefa;
+
+    // Abrir o arquivo no modo de leitura
+    arquivo = fopen("tarefas.dat", "rb");
+    if (arquivo == NULL) {
+        perror("Erro ao abrir arquivo de tarefas");
+        return;
+    }
+
+    // Voltar para o início do arquivo
+    rewind(arquivo);
+
+    printf("Tarefas com Prioridade %d e Categoria %s:\n", prioridade, categoria);
+
+    while (fread(&tarefa, sizeof(struct Tarefa), 1, arquivo) == 1) {
+        if (tarefa.prioridade == prioridade && meu_strcmp(tarefa.categoria, categoria) == 0) {
+            printf("Prioridade: %d\n", tarefa.prioridade);
+            printf("Descricao: %s\n", tarefa.descricao);
+            printf("Categoria: %s\n", tarefa.categoria);
+            printf("Estado: %s\n", getNomeEstado(tarefa.estado));
+            printf("\n");
+        }
+    }
+
+    // Fechar o arquivo após listar as tarefas
+    fclose(arquivo);
+}
