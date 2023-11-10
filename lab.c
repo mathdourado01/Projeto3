@@ -16,6 +16,19 @@ void removerQuebraLinha(char *str) {
     }
 }
 
+const char *getNomeEstado(enum Estado estado) {
+    switch (estado) {
+        case NAO_INICIADO:
+            return "Nao Iniciado";
+        case EM_ANDAMENTO:
+            return "Em Andamento";
+        case COMPLETO:
+            return "Completo";
+        default:
+            return "Desconhecido";
+    }
+}
+
 // Criando a opção de cadastrar as tarefas
 void cadastrarTarefa(FILE *arquivo) {
     struct Tarefa tarefa;
@@ -32,6 +45,13 @@ void cadastrarTarefa(FILE *arquivo) {
     fgets(tarefa.categoria, sizeof(tarefa.categoria), stdin);
     removerQuebraLinha(tarefa.categoria);
 
+    // Escolher o estado da tarefa
+    printf("Escolha o estado da tarefa(Pressione o numero correspondente):\n");
+    printf("0. Nao Iniciado\n");
+    printf("1. Em Andamento\n");
+    printf("2. Completo\n");
+    scanf("%d", (int*)&tarefa.estado);
+
     // Voltar para o final do arquivo antes de escrever uma nova tarefa
     fseek(arquivo, 0, SEEK_END);
 
@@ -46,6 +66,7 @@ void cadastrarTarefa(FILE *arquivo) {
 
     printf("Tarefa cadastrada com sucesso!\n");
 }
+
 // Criando a opção de listar as tarefas
 void listarTarefas(FILE *arquivo) {
     struct Tarefa tarefa;
@@ -66,13 +87,28 @@ void listarTarefas(FILE *arquivo) {
         printf("Prioridade: %d\n", tarefa.prioridade);
         printf("Descricao: %s\n", tarefa.descricao);
         printf("Categoria: %s\n", tarefa.categoria);
+
+        // Adicionando a exibição do estado
+        switch (tarefa.estado) {
+            case NAO_INICIADO:
+                printf("Estado: Nao Iniciado\n");
+                break;
+            case EM_ANDAMENTO:
+                printf("Estado: Em Andamento\n");
+                break;
+            case COMPLETO:
+                printf("Estado: Completo\n");
+                break;
+            default:
+                printf("Estado: Desconhecido\n");
+        }
+
         printf("\n");
     }
 
     // Fechar o arquivo após listar as tarefas
     fclose(arquivo);
 }
-
 // Criando a opção de deletar as tarefas
 void deletarTarefa(FILE *arquivo) {
     int prioridade;
