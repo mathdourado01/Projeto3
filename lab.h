@@ -57,6 +57,14 @@ void filtrarPorCategoria(FILE *arquivo);
 // Função para filtrar tarefas por prioridade e categoria e exibir apenas as tarefas que correspondem a ambos os critérios
 void filtrarPorPrioridadeECategoria(FILE *arquivo);
 
+// Função para exportar tarefas por prioridade e salvar em um arquivo externo
+void exportarPorPrioridade(FILE *arquivo);
+
+// Função para exportar tarefas por categoria e salvar em um arquivo externo
+void exportarPorCategoria(FILE *arquivo);
+
+// Função para exportar tarefas por prioridade e categoria e salvar em um arquivo externo
+void exportarPorPrioridadeECategoria(FILE *arquivo);
 
 #endif // LAB_H
 
