@@ -18,11 +18,6 @@ struct Tarefa {
     char categoria[100];
     enum Estado estado;  // Adicionando a variável de estado
 };
-struct Tarefa {
-    int prioridade;
-    char descricao[300];
-    char categoria[100];
-};
 
 //Função para calcular o comprimento de uma string
 size_t meu_strlen(const char *str);
