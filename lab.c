@@ -7,7 +7,16 @@ size_t meu_strlen(const char *str) {
     }
     return len;
 }
-
+int meu_strcmp(const char *s1, const char *s2) {
+    while (*s1 != '\0' && *s2 != '\0') {
+        if (*s1 != *s2) {
+            return (*s1 - *s2);
+        }
+        s1++;
+        s2++;
+    }
+    return (*s1 - *s2);
+}
 // Função para remover a quebra de linha de uma string lida com fgets
 void removerQuebraLinha(char *str) {
     size_t len = meu_strlen(str);
