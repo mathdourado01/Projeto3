@@ -44,6 +44,20 @@ const char *getNomeEstado(enum Estado estado);
 
 //Função para alterar uma tarefa de um arquivo
 void alterarTarefa(FILE *arquivo);
+
+// Função para filtrar tarefas por prioridade e exibir apenas as tarefas que correspondem à prioridade especificada
+void filtrarPorPrioridade(FILE *arquivo);
+
+// Função para filtrar tarefas por estado e exibir apenas as tarefas que correspondem ao estado especificado
+void filtrarPorEstado(FILE *arquivo);
+
+// Função para filtrar tarefas por categoria e exibir apenas as tarefas que correspondem à categoria especificada
+void filtrarPorCategoria(FILE *arquivo);
+
+// Função para filtrar tarefas por prioridade e categoria e exibir apenas as tarefas que correspondem a ambos os critérios
+void filtrarPorPrioridadeECategoria(FILE *arquivo);
+
+
 #endif // LAB_H
 
 
