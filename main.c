@@ -15,7 +15,8 @@ int main() {
         printf("1. Cadastrar Tarefa\n");
         printf("2. Listar Tarefas\n");
         printf("3. Deletar Tarefa\n");
-        printf("4. Sair\n"); // Adiciona a opção de sair
+        printf("4. Alterar Tarefa\n");
+        printf("5. Sair\n"); // Adiciona a opção de sair
         printf("Escolha uma opcao: ");
         scanf("%d", &opcao);
 
@@ -30,12 +31,14 @@ int main() {
                 deletarTarefa(arquivo);
                 break;
             case 4:
+                alterarTarefa(arquivo);
+            case 5:
                 printf("Saindo do programa. Obrigado!\n");
                 break; // Adiciona a opção de sair
             default:
                 printf("Opção invalida. Tente novamente.\n");
         }
-    } while (opcao != 4); // Ajusta a condição para incluir a opção de sair
+    } while (opcao != 5); // Ajusta a condição para incluir a opção de sair
 
     fclose(arquivo);
 
