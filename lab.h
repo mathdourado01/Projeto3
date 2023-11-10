@@ -5,6 +5,19 @@
 #define LAB_H
 #include <stdio.h>
 // Definindo a estrutura Tarefa para representar informações sobre tarefas
+enum Estado {
+    NAO_INICIADO,
+    EM_ANDAMENTO,
+    COMPLETO
+};
+
+// Estrutura para armazenar os valores da tarefa
+struct Tarefa {
+    int prioridade;
+    char descricao[300];
+    char categoria[100];
+    enum Estado estado;  // Adicionando a variável de estado
+};
 struct Tarefa {
     int prioridade;
     char descricao[300];
@@ -26,6 +39,8 @@ void listarTarefas(FILE *arquivo);
 //Função para deletar uma tarefa de um arquivo
 void deletarTarefa(FILE *arquivo);
 
+// Definindo uma função que retorna o nome de um estado com base no valor enum Estado
+const char *getNomeEstado(enum Estado estado);
 #endif // LAB_H
 
 
