@@ -498,7 +498,7 @@ void exportarPorPrioridade(FILE *arquivo) {
     fclose(arquivo);
     fclose(arquivoExportacao);
 
-    printf("Tarefas exportadas por prioridade com sucesso!\n");
+    printf("Tarefas exportadas por prioridade com sucesso!(encerre o codigo para ver)\n");
 }
 void exportarPorCategoria(FILE *arquivo) {
     char categoria[100];
@@ -544,7 +544,7 @@ void exportarPorCategoria(FILE *arquivo) {
     fclose(arquivo);
     fclose(arquivoExportacao);
 
-    printf("Tarefas exportadas por categoria com sucesso!\n");
+    printf("Tarefas exportadas por categoria com sucesso!(encerre o codigo para ver)\n");
 }
 void exportarPorPrioridadeECategoria(FILE *arquivo) {
     int prioridade;
@@ -594,5 +594,5 @@ void exportarPorPrioridadeECategoria(FILE *arquivo) {
     fclose(arquivo);
     fclose(arquivoExportacao);
 
-    printf("Tarefas exportadas por prioridade e categoria com sucesso!\n");
+    printf("Tarefas exportadas por prioridade e categoria com sucesso!(encerre o codigo para ver)\n");
 }
