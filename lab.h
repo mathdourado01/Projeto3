@@ -18,14 +18,12 @@ struct Tarefa {
     char categoria[100];
     enum Estado estado;  // Adicionando a variável de estado
 };
-struct Tarefa {
-    int prioridade;
-    char descricao[300];
-    char categoria[100];
-};
 
 //Função para calcular o comprimento de uma string
 size_t meu_strlen(const char *str);
+
+// Função para comparar duas strings e determinar a relação entre elas.
+int meu_strcmp(const char *s1, const char *s2);
 
 //Função para remover quebras de linha de uma string
 void removerQuebraLinha(char *str);
@@ -57,6 +55,14 @@ void filtrarPorCategoria(FILE *arquivo);
 // Função para filtrar tarefas por prioridade e categoria e exibir apenas as tarefas que correspondem a ambos os critérios
 void filtrarPorPrioridadeECategoria(FILE *arquivo);
 
+// Função para exportar tarefas por prioridade e salvar em um arquivo externo
+void exportarPorPrioridade(FILE *arquivo);
+
+// Função para exportar tarefas por categoria e salvar em um arquivo externo
+void exportarPorCategoria(FILE *arquivo);
+
+// Função para exportar tarefas por prioridade e categoria e salvar em um arquivo externo
+void exportarPorPrioridadeECategoria(FILE *arquivo);
 
 #endif // LAB_H
 
