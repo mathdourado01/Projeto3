@@ -469,6 +469,24 @@ void exportarPorPrioridade(FILE *arquivo) {
         return;
     }
 
+    int tarefasEncontradas = 0;  // Flag para verificar se foram encontradas tarefas com a prioridade
+
+    // Exibir as tarefas conforme são lidas do arquivo
+    while (fread(&tarefa, sizeof(struct Tarefa), 1, arquivo) == 1) {
+        if (tarefa.prioridade == prioridade) {
+            tarefasEncontradas = 1;  // Tarefa encontrada
+            break;
+        }
+    }
+
+    // Fechar o arquivo após verificar as tarefas
+    fclose(arquivo);
+
+    if (!tarefasEncontradas) {
+        printf("Nenhuma tarefa encontrada com a prioridade %d.\n", prioridade);
+        return;
+    }
+
     // Criar o arquivo de exportação
     char nomeArquivo[20];  // Ajuste o tamanho conforme necessário
     snprintf(nomeArquivo, sizeof(nomeArquivo), "export_prioridade_%d.txt", prioridade);
@@ -476,14 +494,21 @@ void exportarPorPrioridade(FILE *arquivo) {
     FILE *arquivoExportacao = fopen(nomeArquivo, "w");
     if (arquivoExportacao == NULL) {
         perror("Erro ao criar arquivo de exportacao");
-        fclose(arquivo);
+        return;
+    }
+
+    // Abrir o arquivo de tarefas novamente para exportar
+    arquivo = fopen("tarefas.dat", "rb");
+    if (arquivo == NULL) {
+        perror("Erro ao abrir arquivo de tarefas");
+        fclose(arquivoExportacao);
         return;
     }
 
     // Voltar para o início do arquivo
     rewind(arquivo);
 
-    // Exibir as tarefas conforme são lidas do arquivo
+    // Exibir as tarefas conforme são lidas do arquivo e exportar
     while (fread(&tarefa, sizeof(struct Tarefa), 1, arquivo) == 1) {
         if (tarefa.prioridade == prioridade) {
             fprintf(arquivoExportacao, "%d, %s, %s, %s\n",
@@ -498,7 +523,7 @@ void exportarPorPrioridade(FILE *arquivo) {
     fclose(arquivo);
     fclose(arquivoExportacao);
 
-    printf("Tarefas exportadas por prioridade com sucesso!(encerre o codigo para ver)\n");
+    printf("Tarefas exportadas por prioridade com sucesso! (verifique o arquivo exportado)\n");
 }
 void exportarPorCategoria(FILE *arquivo) {
     char categoria[100];
@@ -515,6 +540,24 @@ void exportarPorCategoria(FILE *arquivo) {
         return;
     }
 
+    int tarefasEncontradas = 0;  // Flag para verificar se foram encontradas tarefas com a categoria
+
+    // Exibir as tarefas conforme são lidas do arquivo
+    while (fread(&tarefa, sizeof(struct Tarefa), 1, arquivo) == 1) {
+        if (meu_strcmp(tarefa.categoria, categoria) == 0) {
+            tarefasEncontradas = 1;  // Tarefa encontrada
+            break;
+        }
+    }
+
+    // Fechar o arquivo após verificar as tarefas
+    fclose(arquivo);
+
+    if (!tarefasEncontradas) {
+        printf("Nenhuma tarefa encontrada com a categoria: %s.\n", categoria);
+        return;
+    }
+
     // Criar o arquivo de exportação
     char nomeArquivo[30];  // Ajuste o tamanho conforme necessário
     snprintf(nomeArquivo, sizeof(nomeArquivo), "export_categoria_%s.txt", categoria);
@@ -522,14 +565,21 @@ void exportarPorCategoria(FILE *arquivo) {
     FILE *arquivoExportacao = fopen(nomeArquivo, "w");
     if (arquivoExportacao == NULL) {
         perror("Erro ao criar arquivo de exportacao");
-        fclose(arquivo);
+        return;
+    }
+
+    // Abrir o arquivo de tarefas novamente para exportar
+    arquivo = fopen("tarefas.dat", "rb");
+    if (arquivo == NULL) {
+        perror("Erro ao abrir arquivo de tarefas");
+        fclose(arquivoExportacao);
         return;
     }
 
     // Voltar para o início do arquivo
     rewind(arquivo);
 
-    // Preencher o array de tarefas com as tarefas da categoria desejada
+    // Exibir as tarefas conforme são lidas do arquivo e exportar
     while (fread(&tarefa, sizeof(struct Tarefa), 1, arquivo) == 1) {
         if (meu_strcmp(tarefa.categoria, categoria) == 0) {
             fprintf(arquivoExportacao, "%d, %s, %s, %s\n",
@@ -544,8 +594,9 @@ void exportarPorCategoria(FILE *arquivo) {
     fclose(arquivo);
     fclose(arquivoExportacao);
 
-    printf("Tarefas exportadas por categoria com sucesso!(encerre o codigo para ver)\n");
+    printf("Tarefas exportadas por categoria com sucesso! (verifique o arquivo exportado)\n");
 }
+
 void exportarPorPrioridadeECategoria(FILE *arquivo) {
     int prioridade;
     char categoria[100];
@@ -565,21 +616,46 @@ void exportarPorPrioridadeECategoria(FILE *arquivo) {
         return;
     }
 
+    int tarefasEncontradas = 0;  // Flag para verificar se foram encontradas tarefas com a combinação de prioridade e categoria
+
+    // Exibir as tarefas conforme são lidas do arquivo
+    while (fread(&tarefa, sizeof(struct Tarefa), 1, arquivo) == 1) {
+        if (tarefa.prioridade == prioridade && meu_strcmp(tarefa.categoria, categoria) == 0) {
+            tarefasEncontradas = 1;  // Tarefa encontrada
+            break;
+        }
+    }
+
+    // Fechar o arquivo após verificar as tarefas
+    fclose(arquivo);
+
+    if (!tarefasEncontradas) {
+        printf("Nenhuma tarefa encontrada com prioridade %d e categoria: %s.\n", prioridade, categoria);
+        return;
+    }
+
     // Criar o arquivo de exportação
-    char nomeArquivo[30];  // Ajuste o tamanho conforme necessário
-    snprintf(nomeArquivo, sizeof(nomeArquivo), "export_prioridade_categoria_%d_%s.txt", prioridade, categoria);
+    char nomeArquivo[40];  // Ajuste o tamanho conforme necessário
+    snprintf(nomeArquivo, sizeof(nomeArquivo), "export_prioridade_%d_categoria_%s.txt", prioridade, categoria);
 
     FILE *arquivoExportacao = fopen(nomeArquivo, "w");
     if (arquivoExportacao == NULL) {
         perror("Erro ao criar arquivo de exportacao");
-        fclose(arquivo);
+        return;
+    }
+
+    // Abrir o arquivo de tarefas novamente para exportar
+    arquivo = fopen("tarefas.dat", "rb");
+    if (arquivo == NULL) {
+        perror("Erro ao abrir arquivo de tarefas");
+        fclose(arquivoExportacao);
         return;
     }
 
     // Voltar para o início do arquivo
     rewind(arquivo);
 
-    // Preencher o array de tarefas com as tarefas da prioridade e categoria desejadas
+    // Exibir as tarefas conforme são lidas do arquivo e exportar
     while (fread(&tarefa, sizeof(struct Tarefa), 1, arquivo) == 1) {
         if (tarefa.prioridade == prioridade && meu_strcmp(tarefa.categoria, categoria) == 0) {
             fprintf(arquivoExportacao, "%d, %s, %s, %s\n",
@@ -594,5 +670,5 @@ void exportarPorPrioridadeECategoria(FILE *arquivo) {
     fclose(arquivo);
     fclose(arquivoExportacao);
 
-    printf("Tarefas exportadas por prioridade e categoria com sucesso!(encerre o codigo para ver)\n");
+    printf("Tarefas exportadas por prioridade e categoria com sucesso! (verifique o arquivo exportado após encerrar o codigo)\n");
 }
